@@ -3,8 +3,8 @@ package com.cw.database;
 import com.cw.conexao.Conexao;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-public class CriarPopularTabelas {
-    public static void criarPopularTabelas() {
+public class CriarPopularTabelas extends Conexao {
+    public void criarPopularTabelas() {
         String sql = """
                 DROP DATABASE IF EXISTS cwdb;
                     
@@ -295,13 +295,10 @@ public class CriarPopularTabelas {
                     VALUES (7, 'rafael@filialcentro.com', 'rafael123')
             """;
 
-        Conexao conexao = new Conexao();
-        JdbcTemplate con = conexao.getConexaoDoBanco();
-
         String[] comandos = sql.split(";");
 
         for (int i = 0; i < comandos.length; i++) {
-            con.execute(comandos[i]);
+            conexaoLocal.execute(comandos[i]);
         }
     }
 }

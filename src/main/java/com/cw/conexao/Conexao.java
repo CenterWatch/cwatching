@@ -4,29 +4,31 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 public class Conexao {
-    private JdbcTemplate conexaoDoBanco;
+    public final JdbcTemplate conexaoLocal;
+    public final JdbcTemplate conexaoNuvem;
 
     public Conexao() {
+        this.conexaoLocal = setConexaoLocal();
+        this.conexaoNuvem = setConexaoNuvem();
+    }
+
+    private JdbcTemplate setConexaoLocal() {
         BasicDataSource dataSource = new BasicDataSource();
-        /*
-             Exemplo de driverClassName:
-                com.mysql.cj.jdbc.Driver <- EXEMPLO PARA MYSQL
-                com.microsoft.sqlserver.jdbc.SQLServerDriver <- EXEMPLO PARA SQL SERVER
-        */
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        /*
-             Exemplo de string de conexões:
-                jdbc:mysql://localhost:3306/mydb <- EXEMPLO PARA MYSQL
-                jdbc:sqlserver://localhost:1433;database=mydb <- EXEMPLO PARA SQL SERVER
-        */
         dataSource.setUrl("jdbc:mysql://localhost:3306/cwdb");
         dataSource.setUsername("root");
         dataSource.setPassword("root");
 
-        conexaoDoBanco = new JdbcTemplate(dataSource);
+        return new JdbcTemplate(dataSource);
     }
 
-    public JdbcTemplate getConexaoDoBanco() {
-        return conexaoDoBanco;
+    private JdbcTemplate setConexaoNuvem() {
+        BasicDataSource dataSource = new BasicDataSource();
+        dataSource.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        dataSource.setUrl("jdbc:sqlserver://54.198.160.133:1433;database=cwdb;trustServerCertificate=true");
+        dataSource.setUsername("sa");
+        dataSource.setPassword("cwc@2024");
+
+        return new JdbcTemplate(dataSource);
     }
 }

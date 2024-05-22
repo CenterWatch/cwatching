@@ -11,7 +11,7 @@ import org.json.JSONObject;
 
 public class Slack {
     private static HttpClient client = HttpClient.newHttpClient();
-    private static final String URL = "https://hooks.slack.com/services/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";
+    private static final String URL = "https://hooks.slack.com/services/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";
 
     private static void postar(JSONObject content) {
         HttpRequest request = HttpRequest.newBuilder(
