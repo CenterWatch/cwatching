@@ -5,13 +5,21 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Timer;
 
 import com.cw.models.Ocorrencia;
+import com.github.britooo.looca.api.core.Looca;
 import org.json.JSONObject;
 
 public class SlackService {
     private static HttpClient client = HttpClient.newHttpClient();
-    private static final String URL = "https://hooks.slack.com/services/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";
+    private static final String URL = "https://hooks.slack.com/services/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";
+    private static Timeout timeout;
+
+    public SlackService() {
+        SlackService.timeout = new Timeout();
+        new Timer().schedule(timeout, 0, 100);
+    }
 
     private static void postar(JSONObject content) {
         HttpRequest request = HttpRequest.newBuilder(
@@ -25,8 +33,6 @@ public class SlackService {
 
             System.out.println(String.format("Status: %s", response.statusCode()));
             System.out.println(String.format("Response: %s", response.body()));
-            throw new InterruptedException();
-
 
         } catch (InterruptedException | IOException e) {
             // Sout;
@@ -34,13 +40,17 @@ public class SlackService {
         }
     }
 
-    public static void postarOcorrencia(Ocorrencia o) {
+    public void postarOcorrencia(Ocorrencia o) {
         String content = """
                 %s
                 %s
                 %s
-                """.formatted(o.getTitulo(), o.getDescricao(), o.getTipo());
+                Máquina: %s
+                """.formatted(o.getTitulo(), o.getDescricao(), o.getTipo(), new Looca().getRede().getParametros().getHostName());
 
-        postar(new JSONObject().put("text", content));
+        if (!timeout.getRunning()) {
+            postar(new JSONObject().put("text", content));
+            timeout.setRunning(true);
+        }
     }
 }

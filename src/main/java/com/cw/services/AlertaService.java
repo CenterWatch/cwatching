@@ -13,6 +13,9 @@ public class AlertaService {
     private AlertaDAO alertaDAO;
     private OcorrenciaDAO ocorrenciaDAO;
     private Integer decrementoOcorrencia;
+    private SlackService slackVol;
+    private SlackService slackCpu;
+    private SlackService slackRam;
 
     private final Integer TEMPO_OCORRENCIA = 5;
 
@@ -23,6 +26,9 @@ public class AlertaService {
         this.registrarProcessos = true;
         alertaDAO = new AlertaDAO();
         ocorrenciaDAO = new OcorrenciaDAO();
+        this.slackVol = new SlackService();
+        this.slackCpu = new SlackService();
+        this.slackRam = new SlackService();
         decrementoOcorrencia = TEMPO_OCORRENCIA;
     }
 
@@ -46,7 +52,7 @@ public class AlertaService {
                 );
 
                 ocorrenciaDAO.inserirOcorrencia(o);
-                SlackService.postarOcorrencia(o);
+                slackRam.postarOcorrencia(o);
 
                 decrementoOcorrencia = TEMPO_OCORRENCIA;
             }
@@ -64,7 +70,7 @@ public class AlertaService {
                 );
 
                 ocorrenciaDAO.inserirOcorrencia(o);
-                SlackService.postarOcorrencia(o);
+                slackCpu.postarOcorrencia(o);
 
                 decrementoOcorrencia = TEMPO_OCORRENCIA;
             }

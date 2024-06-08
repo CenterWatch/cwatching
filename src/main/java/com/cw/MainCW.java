@@ -1,6 +1,7 @@
 package com.cw;
 
 import com.cw.conexao.Conexao;
+import com.cw.models.Ocorrencia;
 import com.cw.models.Usuario;
 import com.cw.services.*;
 
@@ -11,7 +12,6 @@ import java.util.List;
 public class MainCW {
 
     public static void main(String[] args) {
-
         Usuario jean = new Usuario("jean.santos", "jea123123");
         Usuario lucas = new Usuario("lucas.faes", "luc123123");
         Usuario maria = new Usuario("maria.guardiao", "mar123123");
@@ -43,7 +43,7 @@ public class MainCW {
                                                                              \s                                                                         
                 """);
 
-        LoginService.logar(loginJava, user);
+        LoginService.logar(false, user, true);
 
     }
 

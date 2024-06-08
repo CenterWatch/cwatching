@@ -33,12 +33,12 @@ public class PermProcessoDAO extends Conexao {
         return p;
     }
 
-    public void inserirPermProcesso(String p, Config c) {
-        String sql = "INSERT INTO perm_processo (nome, fk_config) values (?, ?)";
+    public void inserirPermProcesso(String p, String path, Config c) {
+        String sql = "INSERT INTO perm_processo (nome, path, fk_config) values (?, ?, ?)";
         try{
             System.out.println("Adicionado: " + p);
-            conLocal.update(sql, p, c.getIdConfig());
-            conNuvem.update(sql, p, c.getIdConfig());
+            conLocal.update(sql, p, path, c.getIdConfig());
+            conNuvem.update(sql, p, path, c.getIdConfig());
 
         }catch (Exception e){
             LogsService.gerarLog("Falha ao inserir processo: " + e.getMessage());

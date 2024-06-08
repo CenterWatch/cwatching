@@ -25,7 +25,8 @@ public class LoginService {
     static ConfigDAO configDAO = new ConfigDAO();
     PermProcessoDAO permProcessoDAO = new PermProcessoDAO();
 
-    public static void logar(Boolean loginNode, Usuario u) {
+    public static void logar(Boolean loginNode, Usuario u, Boolean monitorarMouse) {
+
         Usuario user = u;
 
         if (loginNode) {
@@ -73,6 +74,7 @@ public class LoginService {
         atualizarVolume = new Timer();
         monitorarProcesso = new Timer();
         monitorarOciosidade = new Timer();
+        SlackService slack = new SlackService();
 
         atualizarRegistro.schedule(new RegistroService(sessaoAtual, alerta), 0, configAtual.getIntervaloRegistroMs());
 
@@ -84,6 +86,6 @@ public class LoginService {
 
         // Inicializa o monitoramento de ociosidade de mouse do usuário
         ociosidadeService = new OciosidadeService(usuario, configAtual.getTimerMouseMs(), configAtual.getSensibilidadeMouse());
-        monitorarOciosidade.schedule(ociosidadeService, 0, 500);
+        if (monitorarMouse) monitorarOciosidade.schedule(ociosidadeService, 0, 500);
     }
 }

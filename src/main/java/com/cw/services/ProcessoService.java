@@ -8,6 +8,7 @@ import com.github.britooo.looca.api.core.Looca;
 import com.github.britooo.looca.api.group.processos.Processo;
 import com.google.gson.Gson;
 import oshi.SystemInfo;
+import oshi.software.os.OSProcess;
 
 import java.io.IOException;
 import java.util.*;
@@ -17,6 +18,7 @@ public class ProcessoService extends TimerTask {
     private Map<String, Object> permProcessos;
     private PermProcessoDAO permProcessoDAO;
     private Looca looca;
+    private SystemInfo oshi;
     private Set<String> processos;
     Gson gson = new Gson();
 
@@ -24,6 +26,7 @@ public class ProcessoService extends TimerTask {
         this.config = config;
         this.permProcessoDAO = new PermProcessoDAO();
         looca = new Looca();
+        oshi = new SystemInfo();
     }
 
     @Override
@@ -33,7 +36,8 @@ public class ProcessoService extends TimerTask {
 
         for (String processo : processos) {
             if (permProcessos.get(processo) == null) {
-                permProcessoDAO.inserirPermProcesso(processo, config);
+                String path = getProcessoPath(processo);
+                if (!path.isEmpty() && !path.contains("C:\\Windows\\System32")) permProcessoDAO.inserirPermProcesso(processo, path, config);
             } else {
                 PermProcesso p = gson.fromJson(gson.toJson(permProcessos.get(processo)), PermProcesso.class);
 
@@ -69,5 +73,13 @@ public class ProcessoService extends TimerTask {
         }
 
         return map;
+    }
+
+    private String getProcessoPath(String nome) {
+        for (OSProcess p : oshi.getOperatingSystem().getProcesses()) {
+            if (p.getName().equals(nome)) return p.getPath();
+        }
+
+        return "";
     }
 }

@@ -26,6 +26,7 @@ public class Node {
 
             Scanner data = new Scanner(socket.getInputStream());
             String json = (String) data.nextLine();
+            System.out.println(json);
 
             return new Gson().fromJson(json, Usuario.class);
         } catch (IOException e) {
@@ -36,7 +37,7 @@ public class Node {
     }
 
     public static void listenLogout(Integer idSessao) {
-
+        
         Runnable logoutListener = () -> {
             try (ServerSocket serverSocket = new ServerSocket(PORTA)) {
                 Socket socket = serverSocket.accept();
@@ -51,7 +52,7 @@ public class Node {
             LoginService.atualizarVolume.cancel();
             LoginService.monitorarOciosidade.cancel();
             LoginService.ociosidadeService.isRunning = false;
-            LoginService.logar(true, new Usuario());
+            LoginService.logar(true, new Usuario(), true);
         };
 
         new Thread(logoutListener).start();
