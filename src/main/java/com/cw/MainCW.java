@@ -24,10 +24,13 @@ public class MainCW {
 
         Usuario user = new Usuario();
 
-//        Boolean loginJava = Boolean.parseBoolean(args[0]); // Caso for construir o arquivo .jar
-        Boolean loginJava = true; // Caso estiver executando na IDE
+//        Boolean loginNode = Boolean.parseBoolean(args[0]); // Caso for construir o arquivo .jar
+        Boolean loginNode = true; // Caso estiver executando na IDE
+        
+//        Boolean monitorarMouse = Boolean.parseBoolean(args[2]); // Caso for construir o arquivo .jar
+        Boolean monitorarMouse = true; // Caso estiver executando na IDE
 
-        if (!loginJava) {
+        if (!loginNode) {
             System.out.println(usuarios.get(Integer.parseInt(args[1])));
             user = usuarios.get(Integer.parseInt(args[1]));
         }
@@ -43,7 +46,8 @@ public class MainCW {
                                                                              \s                                                                         
                 """);
 
-        LoginService.logar(false, user, true);
+
+        LoginService.logar(loginNode, user, monitorarMouse);
 
     }
 

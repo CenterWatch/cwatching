@@ -63,7 +63,7 @@ public class LoginService {
         Integer idSessao = sessaoDAO.registrarSessao(maquina.getIdMaquina(), usuario.getIdUsuario());
         Sessao sessaoAtual = sessaoDAO.buscarSessao(idSessao);
 
-        Node.listenLogout(sessaoAtual.getIdSessao());
+        if (loginNode) Node.listenLogout(sessaoAtual.getIdSessao());
 
         AlertaService alerta = new AlertaService(configAtual);
 

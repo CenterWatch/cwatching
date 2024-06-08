@@ -13,7 +13,8 @@ import org.json.JSONObject;
 
 public class SlackService {
     private static HttpClient client = HttpClient.newHttpClient();
-    private static final String URL = "https://hooks.slack.com/services/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";
+    private static final String URL = ""; // Coloque aqui seu Webhook do Slack [APAGAR ANTES DE DAR COMMIT]
+
     private static Timeout timeout;
 
     public SlackService() {
