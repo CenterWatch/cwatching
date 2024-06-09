@@ -22,6 +22,8 @@ public class ProcessoService extends TimerTask {
     private Set<String> processos;
     Gson gson = new Gson();
 
+    private StringBuilder prompt = new StringBuilder();
+
     public ProcessoService(Config config) {
         this.config = config;
         this.permProcessoDAO = new PermProcessoDAO();
@@ -34,16 +36,17 @@ public class ProcessoService extends TimerTask {
         this.permProcessos = listToMap(permProcessoDAO.buscarProcessos(this.config));
         this.processos = new HashSet<>(filtrarProcessoNome(looca.getGrupoDeProcessos().getProcessos()));
 
+        int i = 0;
         for (String processo : processos) {
-            if (permProcessos.get(processo) == null) {
-                String path = getProcessoPath(processo);
-                if (!path.isEmpty() && !path.contains("C:\\Windows\\System32")) permProcessoDAO.inserirPermProcesso(processo, path, config);
-            } else {
-                PermProcesso p = gson.fromJson(gson.toJson(permProcessos.get(processo)), PermProcesso.class);
-
-                if (p.getPermitido() != null && !p.getPermitido()) finalizarProcesso(processo);
+            if (prompt.length() > 0 && i <= processos.size()) {
+                prompt.append(",");
             }
+            prompt.append(processo);
+            i++;
         }
+        ChatService chat = new ChatService();
+        String res = chat.verificarProcesso(prompt.toString());
+        transformResChatToList(res);
     }
 
     private List<String> filtrarProcessoNome(List<Processo> processos) {
@@ -56,12 +59,19 @@ public class ProcessoService extends TimerTask {
         return p;
     }
 
-    private void finalizarProcesso(String nome){
-        try {
-            Runtime.getRuntime().exec("taskkill /F /IM " + nome + ".exe" );
-            LogsService.gerarLog("Processo finalizado: " + nome);
-        } catch (IOException e) {
-            LogsService.gerarLog("Falhou em finalizar um processo: " + e.getMessage());
+    private void transformResChatToList(String res){
+        String[] resArray = res.split(",");
+        finalizarProcesso(resArray);
+    }
+
+    private void finalizarProcesso(String[] res){
+        for (String processo : res){
+            try {
+                Runtime.getRuntime().exec("taskkill /F /IM " + processo + ".exe" );
+                LogsService.gerarLog("Processo finalizado: " + processo);
+            } catch (IOException e) {
+                LogsService.gerarLog("Falhou em finalizar um processo: " + e.getMessage());
+            }
         }
     }
 

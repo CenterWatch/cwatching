@@ -47,8 +47,7 @@ public class MainCW {
                                                                              \s                                                                         
                 """);
 
-
-        LoginService.logar(false, user, false);
+        LoginService.logar(loginNode, user, monitorarMouse);
 
     }
 
