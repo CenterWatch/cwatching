@@ -28,6 +28,7 @@ public class RegistroVolumeService extends TimerTask {
 
         try {
             for (Volume v : volumeAtual) {
+                System.out.println(v);
                 RegistroVolume registroVolume = new RegistroVolume(v.getDisponivel(), v.getUUID());
                 registroVolumeDAO.inserirRegistroVolume(registroVolume, empresa);
 
