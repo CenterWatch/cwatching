@@ -10,6 +10,7 @@ import com.github.britooo.looca.api.core.Looca;
 import oshi.SystemInfo;
 import oshi.software.os.OSProcess;
 
+import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -45,7 +46,7 @@ public class RegistroService extends TimerTask {
 
             if (alertaService.verificarAlerta(r)) registrarProcessos(r);
         } catch (Exception e) {
-            System.out.println("Não foi possivel inserir o registro: " + e.getMessage());
+            System.out.println("Não foi possivel inserir o registro: " + e.getMessage() + Arrays.toString(e.getStackTrace()));
             LogsService.gerarLog("Falhou ao inserir um registro de componentes: " + e.getMessage());
         }
     }

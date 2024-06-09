@@ -25,20 +25,18 @@ public class MainCW {
 
         List<Usuario> usuarios = Arrays.asList(jean, lucas, maria, pedro, samuel, vinicius, benedito);
 
-        Usuario user = new Usuario();
+        Usuario user = usuarios.get(0);
 
-        Boolean loginNode = Boolean.parseBoolean(args[0]); // Caso for construir o arquivo .jar
-//        Boolean loginNode = true; // Caso estiver executando na IDE
-
-        Boolean monitorarMouse = Boolean.parseBoolean(args[2]); // Caso for construir o arquivo .jar
-//        Boolean monitorarMouse = true; // Caso estiver executando na IDE
-
-        if (!loginNode) {
-            System.out.println(usuarios.get(Integer.parseInt(args[1])));
-            user = usuarios.get(Integer.parseInt(args[1]));
-        }
-
-        Conexao.testarConexoes();
+//        Boolean loginNode = Boolean.parseBoolean(args[0]); // Caso for construir o arquivo .jar
+////        Boolean loginNode = true; // Caso estiver executando na IDE
+//
+//        Boolean monitorarMouse = Boolean.parseBoolean(args[2]); // Caso for construir o arquivo .jar
+////        Boolean monitorarMouse = true; // Caso estiver executando na IDE
+//
+//        if (!loginNode) {
+//            System.out.println(usuarios.get(Integer.parseInt(args[1])));
+//            user = usuarios.get(Integer.parseInt(args[1]));
+//        }
 
         System.out.println("""                                                                      
                    ______           __           _       __      __       __ \s
@@ -48,7 +46,6 @@ public class MainCW {
                 \\____/\\___/_/ /_/\\__/\\___/_/    |__/|__/\\__,_/\\__/\\___/_/ /_/\s
                                                                              \s                                                                         
                 """);
-
 
         LoginService.logar(loginNode, user, monitorarMouse);
 

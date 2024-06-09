@@ -23,7 +23,7 @@ public class VolumeDAO extends Conexao {
         String sql = "INSERT INTO volume (uuid, nome, ponto_montagem, volume_total, fk_maquina) VALUES (?, ?, ?, ?, (SELECT id_maquina FROM maquina WHERE hostname = ? AND fk_empresa = ?))";
 
         try{
-            conLocal.update(sql, v.getUUID(), v.getNome(), v.getPontoMontagem(), v.getVolumeTotal(), new Looca().getRede().getParametros().getHostName(), emp.getIdEmpresa());
+            insert(sql, v.getUUID(), v.getNome(), v.getPontoMontagem(), v.getVolumeTotal(), new Looca().getRede().getParametros().getHostName(), emp.getIdEmpresa());
         }catch (Exception e) {
             LogsService.gerarLog("Falha ao inserir volume: " + e.getMessage());
         }
