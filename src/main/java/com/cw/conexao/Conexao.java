@@ -32,7 +32,7 @@ public class Conexao {
 
             BasicDataSource dataSource = new BasicDataSource();
             dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-            dataSource.setUrl("jdbc:mysql://mysql:3306/cwdb");
+            dataSource.setUrl("jdbc:mysql://localhost:3306/cwdb");
             dataSource.setUsername("root");
             dataSource.setPassword("root");
 
@@ -58,6 +58,7 @@ public class Conexao {
             System.out.println("Conexão estabelecida...");
             return true;
         } catch (Exception e) {
+            System.out.println("Falha ao estabelecer conexão...");
             LogsService.gerarLog("Falha ao estabelecer conexão JDBC: " + e.getMessage() + " " + Arrays.toString(e.getStackTrace()));
         }
 
