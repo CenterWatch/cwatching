@@ -47,11 +47,10 @@ public class AlertaService {
                 Ocorrencia o = new Ocorrencia(
                         "Alerta Uso de RAM",
                         "A RAM permaneceu acima de %.1f%% por %d segundos.".formatted(config.getMaxRam(), TEMPO_OCORRENCIA * config.getIntervaloRegistroMs() / 1000),
-                        "[SISTEMA] RAM",
-                        r.getFkSessao()
+                        "[SISTEMA] RAM"
                 );
 
-                ocorrenciaDAO.inserirOcorrencia(o);
+                ocorrenciaDAO.inserirOcorrencia(o, config);
                 slackRam.postarOcorrencia(o);
 
                 decrementoOcorrencia = TEMPO_OCORRENCIA;
@@ -65,11 +64,10 @@ public class AlertaService {
                 Ocorrencia o = new Ocorrencia(
                         "Alerta Uso de CPU",
                         "A CPU permaneceu acima de %.1f%% por %d segundos.".formatted(config.getMaxCpu(), TEMPO_OCORRENCIA * 2),
-                        "[SISTEMA] CPU",
-                        r.getFkSessao()
+                        "[SISTEMA] CPU"
                 );
 
-                ocorrenciaDAO.inserirOcorrencia(o);
+                ocorrenciaDAO.inserirOcorrencia(o, config);
                 slackCpu.postarOcorrencia(o);
 
                 decrementoOcorrencia = TEMPO_OCORRENCIA;

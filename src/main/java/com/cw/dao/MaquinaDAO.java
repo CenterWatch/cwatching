@@ -7,24 +7,25 @@ import com.cw.services.LogsService;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MaquinaDAO extends Conexao {
     //TODO: remover formatted
 
     public MaquinaDAO() {
     }
 
-    public Integer inserirMaquina(Maquina m, Empresa empresa) {
+    public void inserirMaquina(Maquina m, Empresa empresa) {
         try {
             if (!verificarMaquinaExistePorHostnameEEmpresa(m.getHostname(), empresa)) {
                 String sql = "INSERT INTO maquina (so, cpu_modelo, ram_total, hostname, ip, fk_empresa) VALUES (?, ?, ?, ?, ?, ?)";
-                return keyInsert(sql, m.getSo(), m.getCpu(), m.getRam(), m.getHostname(), m.getIp(), m.getFkEmpresa());
+                insert(sql, m.getSo(), m.getCpu(), m.getRam(), m.getHostname(), m.getIp(), m.getFkEmpresa());
             }
 
         }catch (Exception e){
             LogsService.gerarLog("Falha ao inserir maquina: " + e.getMessage());
         }
-
-        return null;
     }
 
     public Boolean componentesAlterou(Maquina m) {
@@ -67,17 +68,5 @@ public class MaquinaDAO extends Conexao {
         }
 
         return existe;
-    }
-
-    public Maquina buscarMaquinaPorHostnameEEmpresa(String hostname, Empresa empresa) {
-        Maquina maquina = new Maquina();
-        try {
-            String sql = "SELECT * FROM maquina WHERE hostname = '%s' AND fk_empresa = %d".formatted(hostname, empresa.getIdEmpresa());
-
-            maquina = conNuvem.queryForObject(sql, new BeanPropertyRowMapper<>(Maquina.class));
-        }catch (Exception e){
-            LogsService.gerarLog("Falha ao buscar máquina: " + e.getMessage());
-        }
-        return maquina;
     }
 }

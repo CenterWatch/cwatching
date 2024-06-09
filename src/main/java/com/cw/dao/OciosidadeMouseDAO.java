@@ -25,7 +25,7 @@ public class OciosidadeMouseDAO extends Conexao {
         Integer key = null;
 
         try {
-            key = keyInsert(sql, r.getFkUsuario());
+            key = keyInsert(sql, r.getFkUsuario()).get("nuvem");
 
         } catch (Exception e) {
             LogsService.gerarLog("Falha ao registrar ociosidade: " + e.getMessage());

@@ -6,6 +6,7 @@ import com.cw.models.*;
 import com.github.britooo.looca.api.core.Looca;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Timer;
 
 public class LoginService {
@@ -46,10 +47,12 @@ public class LoginService {
 
         // Busca a empresa pelo usuário logado
         Empresa empresa = userDao.buscarEmpresaPorUsername(username);
+        System.out.println(empresa);
 
         // Busca os parâmetros definidos pela empresa
         Config configAtual = configDAO.buscarConfigPorEmpresa(empresa);
         configAtual.setPermProcessos(configDAO.buscarPermProcessosPorConfig(configAtual));
+        System.out.println(configAtual);
 
         // Cadastra a máquina atual caso ela não esteja no banco
         MaquinaService maquinaService = new MaquinaService();
@@ -57,15 +60,14 @@ public class LoginService {
 
         // Busca objetos usuário e máquina para ser registrada a sessão criada
         Usuario usuario = userDao.buscarUsuarioPorUsername(username);
-        Maquina maquina = maquinaDAO.buscarMaquinaPorHostnameEEmpresa(hostname, empresa);
 
         // Registra a sessão criada ao logar
-        Integer idSessao = sessaoDAO.registrarSessao(maquina.getIdMaquina(), usuario.getIdUsuario());
-        Sessao sessaoAtual = sessaoDAO.buscarSessao(idSessao);
+        sessaoDAO.registrarSessao(usuario, empresa);
 
-        if (loginNode) Node.listenLogout(sessaoAtual.getIdSessao());
+//        if (loginNode) Node.listenLogout(sessaoAtual.getIdSessao());
 
         AlertaService alerta = new AlertaService(configAtual);
+        System.out.println(alerta);
 
         // Inicializa timer para coleta de dados de CPU e RAM
         System.out.println("\nIniciando coleta de dados...\n");
@@ -76,16 +78,18 @@ public class LoginService {
         monitorarOciosidade = new Timer();
         SlackService slack = new SlackService();
 
-        atualizarRegistro.schedule(new RegistroService(sessaoAtual, alerta), 0, configAtual.getIntervaloRegistroMs());
+        atualizarRegistro.schedule(new RegistroService(empresa, alerta), 0, configAtual.getIntervaloRegistroMs());
 
         // Inicializa timer para coleta de dados de volumes
-        atualizarVolume.schedule(new RegistroVolumeService(sessaoAtual, alerta), 0, configAtual.getIntervaloVolumeMs());
+        atualizarVolume.schedule(new RegistroVolumeService(empresa, alerta), 0, configAtual.getIntervaloVolumeMs());
 
         // Inicializa timer para monitoramento de processos
         monitorarProcesso.schedule(new ProcessoService(configAtual), 2500, 500);
 
         // Inicializa o monitoramento de ociosidade de mouse do usuário
-        ociosidadeService = new OciosidadeService(usuario, configAtual.getTimerMouseMs(), configAtual.getSensibilidadeMouse());
-        if (monitorarMouse) monitorarOciosidade.schedule(ociosidadeService, 0, 500);
+        if (monitorarMouse) {
+            ociosidadeService = new OciosidadeService(usuario, configAtual.getTimerMouseMs(), configAtual.getSensibilidadeMouse());
+            monitorarOciosidade.schedule(ociosidadeService, 0, 500);
+        }
     }
 }

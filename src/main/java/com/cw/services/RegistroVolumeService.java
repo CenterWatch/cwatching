@@ -1,6 +1,7 @@
 package com.cw.services;
 
 import com.cw.dao.RegistroVolumeDAO;
+import com.cw.models.Empresa;
 import com.cw.models.RegistroVolume;
 import com.cw.models.Sessao;
 import com.github.britooo.looca.api.core.Looca;
@@ -11,13 +12,13 @@ import java.util.TimerTask;
 
 public class RegistroVolumeService extends TimerTask {
     private AlertaService alertaService;
-    private Sessao sessao;
+    private Empresa empresa;
     private Looca looca;
     private RegistroVolumeDAO registroVolumeDAO;
 
-    public RegistroVolumeService(Sessao sessao, AlertaService alertaService) {
+    public RegistroVolumeService(Empresa empresa, AlertaService alertaService) {
         this.alertaService = alertaService;
-        this.sessao = sessao;
+        this.empresa = empresa;
         this.looca = new Looca();
         this.registroVolumeDAO = new RegistroVolumeDAO();
     }
@@ -27,8 +28,8 @@ public class RegistroVolumeService extends TimerTask {
 
         try {
             for (Volume v : volumeAtual) {
-                RegistroVolume registroVolume = new RegistroVolume(v.getDisponivel(), sessao.getIdSessao(), v.getUUID());
-                registroVolumeDAO.inserirRegistroVolume(registroVolume);
+                RegistroVolume registroVolume = new RegistroVolume(v.getDisponivel(), v.getUUID());
+                registroVolumeDAO.inserirRegistroVolume(registroVolume, empresa);
 
                 alertaService.verificarAlerta(registroVolumeDAO.buscarUltimoRegVolumePorUUID(v.getUUID()), v.getTotal());
             }

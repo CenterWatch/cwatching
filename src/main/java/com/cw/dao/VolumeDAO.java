@@ -5,6 +5,7 @@ import com.cw.models.Empresa;
 import com.cw.models.Maquina;
 import com.cw.models.Volume;
 import com.cw.services.LogsService;
+import com.github.britooo.looca.api.core.Looca;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -18,11 +19,11 @@ public class VolumeDAO extends Conexao {
     public VolumeDAO() {
     }
 
-    public void inserirVolume(Volume v) {
-        String sql = "INSERT INTO volume (uuid, nome, ponto_montagem, volume_total, fk_maquina) VALUES (?, ?, ?, ?, ?)";
+    public void inserirVolume(Volume v, Empresa emp) {
+        String sql = "INSERT INTO volume (uuid, nome, ponto_montagem, volume_total, fk_maquina) VALUES (?, ?, ?, ?, (SELECT id_maquina FROM maquina WHERE hostname = ? AND fk_empresa = ?))";
 
         try{
-            insert(sql, v.getUUID(), v.getNome(), v.getPontoMontagem(), v.getVolumeTotal(), v.getFkMaquina());
+            conLocal.update(sql, v.getUUID(), v.getNome(), v.getPontoMontagem(), v.getVolumeTotal(), new Looca().getRede().getParametros().getHostName(), emp.getIdEmpresa());
         }catch (Exception e) {
             LogsService.gerarLog("Falha ao inserir volume: " + e.getMessage());
         }

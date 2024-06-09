@@ -9,12 +9,11 @@ public class Registro {
     private Long uptime;
     private Integer fkSessao;
 
-    public Registro(Double usoCpu, Long usoRam, Long disponivelRam, Long uptime, Integer fkSessao) {
+    public Registro(Double usoCpu, Long usoRam, Long disponivelRam, Long uptime) {
         this.usoCpu = usoCpu;
         this.usoRam = usoRam;
         this.disponivelRam = disponivelRam;
         this.uptime = uptime;
-        this.fkSessao = fkSessao;
     }
 
     public Registro() {

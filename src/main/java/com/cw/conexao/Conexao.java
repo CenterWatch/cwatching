@@ -6,6 +6,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.sql.Connection;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -30,7 +32,7 @@ public class Conexao {
 
             BasicDataSource dataSource = new BasicDataSource();
             dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-            dataSource.setUrl("jdbc:mysql://localhost:3306/cwdb");
+            dataSource.setUrl("jdbc:mysql://mysql:3306/cwdb");
             dataSource.setUsername("root");
             dataSource.setPassword("root");
 
@@ -48,17 +50,18 @@ public class Conexao {
          return new JdbcTemplate(dataSource);
     }
 
-    private static void testarConexao(JdbcTemplate con) {
+    public static Boolean testarConexoes() {
         try {
-            con.queryForObject("SELECT 1", Integer.class);
-        } catch (Exception e) {
-            LogsService.gerarLog("Falha ao estabelecer conexão com o MySQL: " + e.getMessage() + " " + Arrays.toString(e.getStackTrace()));
-        }
-    }
+            conLocal.queryForObject("SELECT 1", Integer.class);
+            conNuvem.queryForObject("SELECT 1", Integer.class);
 
-    public static void testarConexoes() {
-        testarConexao(conLocal);
-        testarConexao(conNuvem);
+            System.out.println("Conexão estabelecida...");
+            return true;
+        } catch (Exception e) {
+            LogsService.gerarLog("Falha ao estabelecer conexão JDBC: " + e.getMessage() + " " + Arrays.toString(e.getStackTrace()));
+        }
+
+        return false;
     }
 
     public void insert(String sql, Object ... args) {
@@ -66,9 +69,18 @@ public class Conexao {
         insertFuture(sql, conNuvem, args);
     }
 
-    public Integer keyInsert(String sql, Object ... args) {
-        insertFuture(sql, conLocal, args);
-        return keyInsertFuture(sql, conNuvem, args);
+    public void insertDiff(String sqlL, String sqlN, Object ... args) {
+        insertFuture(sqlL, conLocal, args);
+        insertFuture(sqlN, conNuvem, args);
+    }
+
+    public Map<String, Integer> keyInsert(String sql, Object ... args) {
+        Map<String, Integer> keyMap = new HashMap<>();
+
+//        keyMap.put("local", keyInsertFuture(sql, conLocal, args));
+        keyMap.put("nuvem", keyInsertFuture(sql, conNuvem, args));
+
+        return keyMap;
     }
 
     public void insertFuture(String sql, JdbcTemplate con, Object ... args) {

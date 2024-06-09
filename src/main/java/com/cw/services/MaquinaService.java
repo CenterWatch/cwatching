@@ -47,7 +47,7 @@ public class MaquinaService {
                 System.out.println("Falha ao obter IP Público: " + e.getMessage());
             }
 
-            registrarGrupoVolumePorMaquina(maquinaDAO.inserirMaquina(maquinaAtual, empresa));
+            registrarGrupoVolumePorMaquina(empresa);
         } else {
             System.out.println("\nMáquina encontrada.");
         }
@@ -57,11 +57,11 @@ public class MaquinaService {
             maquinaDAO.atualizarMaquina(maquinaAtual, empresa);
         }
 
+        maquinaDAO.inserirMaquina(maquinaAtual, empresa);
         atualizarGrupoVolumeExistente(empresa);
     }
 
     private void atualizarGrupoVolumeExistente(Empresa e) {
-        Maquina maquina = maquinaDAO.buscarMaquinaPorHostnameEEmpresa(looca.getRede().getParametros().getHostName(), e);
         List<Volume> volumes = looca.getGrupoDeDiscos().getVolumes();
 
         for (Volume v : volumes) {
@@ -73,15 +73,15 @@ public class MaquinaService {
                     v.getUUID(),
                     v.getNome(),
                     v.getPontoDeMontagem(),
-                    v.getTotal(),
-                    maquina.getIdMaquina()
+                    v.getTotal()
             );
 
-            if ((Integer) mapVolume.get("existe") == 0) {
+            System.out.println(mapVolume.get("existe"));
+            if (Integer.parseInt(mapVolume.get("existe").toString()) == 0) {
                 System.out.println("\nNovo volume detectado. Inserindo volume...");
-                volumeDAO.inserirVolume(volumeAtual);
+                volumeDAO.inserirVolume(volumeAtual, e);
 
-            } else if ((Integer) mapVolume.get("alterou") == 1) {
+            } else if (Integer.parseInt(mapVolume.get("alterou").toString()) == 1) {
                 System.out.println("\n alteração no volume. Atualizando dados...");
                 volumeDAO.atualizarVolume(volumeAtual);
 
@@ -89,18 +89,19 @@ public class MaquinaService {
         }
     }
 
-    public void registrarGrupoVolumePorMaquina(Integer idMaquina) {
+    public void registrarGrupoVolumePorMaquina(Empresa emp) {
         List<Volume> volumes = looca.getGrupoDeDiscos().getVolumes();
 
         for (Volume volume : volumes) {
             try {
-                volumeDAO.inserirVolume(new com.cw.models.Volume(
+                com.cw.models.Volume v = new com.cw.models.Volume(
                         volume.getUUID(),
                         volume.getNome(),
                         volume.getPontoDeMontagem(),
-                        volume.getTotal(),
-                        idMaquina
-));
+                        volume.getTotal()
+                );
+
+                volumeDAO.inserirVolume(v, emp);
             } catch (Exception e) {
                 LogsService.gerarLog("Falha ao registrar volume: " + e.getMessage() + " " + Arrays.toString(e.getStackTrace()));
             }

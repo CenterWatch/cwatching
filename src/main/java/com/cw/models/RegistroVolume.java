@@ -7,9 +7,8 @@ public class RegistroVolume {
     private Integer fkSessao;
     private String fkVolume;
 
-    public RegistroVolume(Long volumeDisponivel, Integer fkSessao, String fkVolume) {
+    public RegistroVolume(Long volumeDisponivel, String fkVolume) {
         this.volumeDisponivel = volumeDisponivel;
-        this.fkSessao = fkSessao;
         this.fkVolume = fkVolume;
     }
 

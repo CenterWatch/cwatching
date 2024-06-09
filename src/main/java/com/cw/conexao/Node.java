@@ -46,7 +46,7 @@ public class Node {
                 System.out.println(e.getMessage());
             }
 
-            new SessaoDAO().updateFimSessao(idSessao);
+//            new SessaoDAO().updateFimSessao(idSessao);
             LoginService.atualizarRegistro.cancel();
             LoginService.monitorarProcesso.cancel();
             LoginService.atualizarVolume.cancel();

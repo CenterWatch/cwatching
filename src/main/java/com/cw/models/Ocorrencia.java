@@ -11,11 +11,10 @@ public class Ocorrencia {
     private Integer fkSessao;
     private Integer fkAtribuido;
 
-    public Ocorrencia(String titulo, String descricao, String tipo, Integer fkSessao) {
+    public Ocorrencia(String titulo, String descricao, String tipo) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.tipo = tipo;
-        this.fkSessao = fkSessao;
     }
 
     public Ocorrencia() {

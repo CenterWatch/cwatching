@@ -2,6 +2,7 @@ package com.cw.services;
 
 import com.cw.dao.ProcessoDAO;
 import com.cw.dao.RegistroDAO;
+import com.cw.models.Empresa;
 import com.cw.models.Processo;
 import com.cw.models.Registro;
 import com.cw.models.Sessao;
@@ -13,7 +14,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class RegistroService extends TimerTask {
-    private Sessao sessao;
     private AlertaService alertaService;
 
     private Looca looca = new Looca();
@@ -21,12 +21,13 @@ public class RegistroService extends TimerTask {
 
     private RegistroDAO registroDAO = new RegistroDAO();
     private ProcessoDAO processoDAO = new ProcessoDAO();
+    private Empresa empresa;
 
     private Boolean registrarProcessos = true;
 
-    public RegistroService(Sessao sessao, AlertaService alertaService) {
-        this.sessao = sessao;
+    public RegistroService(Empresa empresa, AlertaService alertaService) {
         this.alertaService = alertaService;
+        this.empresa = empresa;
     }
 
     public void run() {
@@ -36,12 +37,11 @@ public class RegistroService extends TimerTask {
                     looca.getProcessador().getUso()*10 > 100 ? 100.0 : looca.getProcessador().getUso()*10,
                     looca.getMemoria().getEmUso(),
                     looca.getMemoria().getDisponivel(),
-                    looca.getSistema().getTempoDeAtividade(),
-                    sessao.getIdSessao());
+                    looca.getSistema().getTempoDeAtividade());
 
-            registroDAO.inserirRegistro(registro);
+            registroDAO.inserirRegistro(registro, empresa);
 
-            Registro r = registroDAO.buscarUltimoRegistroPorSessao(sessao);
+            Registro r = registroDAO.buscarUltimoRegistroPorSessao(empresa);
 
             if (alertaService.verificarAlerta(r)) registrarProcessos(r);
         } catch (Exception e) {

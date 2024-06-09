@@ -14,7 +14,7 @@ import java.util.Objects;
 import java.util.List;
 
 public class LogsService {
-    private static final Integer QTD_MAX_LINHAS = 15;
+    private static final Integer QTD_MAX_LINHAS = 100;
 
     public static void gerarLog(String mensagem) {
         Path path = Paths.get("/cwatching/logs");

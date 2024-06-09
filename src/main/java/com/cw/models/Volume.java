@@ -22,6 +22,14 @@ public class Volume {
         this.volumeTotal = volumeTotal;
     }
 
+    public Volume(Volume other) {
+        this.UUID = other.UUID;
+        this.nome = other.nome;
+        this.pontoMontagem = other.pontoMontagem;
+        this.volumeTotal = other.volumeTotal;
+        this.fkMaquina = other.fkMaquina;
+    }
+
     public Volume() {
     }
 
