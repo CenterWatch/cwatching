@@ -43,7 +43,7 @@ public class Conexao {
 
          BasicDataSource dataSource = new BasicDataSource();
          dataSource.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-         dataSource.setUrl("jdbc:sqlserver://54.198.160.133:1433;database=cwdbProd;trustServerCertificate=true");
+         dataSource.setUrl("jdbc:sqlserver://54.198.160.133:1433;database=cwdb;trustServerCertificate=true");
          dataSource.setUsername("sa");
          dataSource.setPassword("cwc@2024");
 
