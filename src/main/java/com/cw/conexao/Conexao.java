@@ -28,13 +28,17 @@ public class Conexao {
 
     }
 
+    public JdbcTemplate getConexaoDoBanco() {
+        return conexao;
+    }
+
     private static JdbcTemplate setConexaoLocal() {
 
             BasicDataSource dataSource = new BasicDataSource();
             dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
             dataSource.setUrl("jdbc:mysql://localhost:3306/cwdb");
             dataSource.setUsername("root");
-            dataSource.setPassword("root");
+            dataSource.setPassword("neymar11");
 
             return new JdbcTemplate(dataSource);
     }

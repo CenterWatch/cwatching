@@ -1,8 +1,13 @@
 package com.cw.services;
 
-import java.util.Date;
+import com.cw.dao.RegistroFuncionarioDAO;
+import com.cw.dao.RegistroVolumeDAO;
 
-public class RegistroFuncionario {
+import java.util.Date;
+import java.util.List;
+import java.util.TimerTask;
+
+public class RegistroFuncionario extends TimerTask {
 
     private Integer idRegistro;
     private Date inicioSessao;
@@ -11,6 +16,9 @@ public class RegistroFuncionario {
     private Integer apontamento; // de 0 a 10
     private Integer tarefasTotal;
     private Integer tarefasConcluidas;
+
+    private RegistroFuncionarioDAO registroFuncionarioDAO = new RegistroFuncionarioDAO();
+
 
     public RegistroFuncionario(Integer idRegistro, Date inicioSessao, Date fimSessao, Integer tempo_osiosidade, Integer apontamento, Integer tarefasTotal, Integer tarefasConcluidas) {
         this.idRegistro = idRegistro;
@@ -23,6 +31,12 @@ public class RegistroFuncionario {
     }
 
     public RegistroFuncionario() {
+    }
+
+    @Override
+    public void run() {
+        List<RegistroFuncionario> registroFuncionarios = registroFuncionarioDAO.getRegistroFuncionario();
+        System.out.println(registroFuncionarios);
     }
 
     private double calcularPorcentagemTarefas() {

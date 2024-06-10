@@ -1,9 +1,11 @@
 package com.cw;
 
 import com.cw.conexao.Conexao;
+import com.cw.dao.RegistroFuncionarioDAO;
 import com.cw.models.Ocorrencia;
 import com.cw.models.Usuario;
 import com.cw.services.*;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,6 +17,8 @@ public class MainCW {
 
         if (!Conexao.testarConexoes()) return;
 
+
+
         Usuario jean = new Usuario("jean.santos", "jea123123");
         Usuario lucas = new Usuario("lucas.faes", "luc123123");
         Usuario maria = new Usuario("maria.guardiao", "mar123123");
@@ -25,7 +29,7 @@ public class MainCW {
 
         List<Usuario> usuarios = Arrays.asList(jean, lucas, maria, pedro, samuel, vinicius, benedito);
 
-        Usuario user = usuarios.get(0);
+        Usuario user = usuarios.get(1);
 
 //        Boolean loginNode = Boolean.parseBoolean(args[0]); // Caso for construir o arquivo .jar
 ////        Boolean loginNode = true; // Caso estiver executando na IDE
@@ -49,6 +53,7 @@ public class MainCW {
 
 
         LoginService.logar(false, user, false);
+
 
     }
 

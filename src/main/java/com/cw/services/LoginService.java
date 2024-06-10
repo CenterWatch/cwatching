@@ -17,6 +17,7 @@ public class LoginService {
     public static Timer atualizarVolume;
     public static Timer monitorarProcesso;
     public static Timer monitorarOciosidade;
+    public static Timer monitorarRegistroFuncionario;
 
     public static OciosidadeService ociosidadeService;
     static String hostname = new Looca().getRede().getParametros().getHostName();
@@ -24,6 +25,7 @@ public class LoginService {
     static MaquinaDAO maquinaDAO = new MaquinaDAO();
     static SessaoDAO sessaoDAO = new SessaoDAO();
     static ConfigDAO configDAO = new ConfigDAO();
+
     PermProcessoDAO permProcessoDAO = new PermProcessoDAO();
 
     public static void logar(Boolean loginNode, Usuario u, Boolean monitorarMouse) {
@@ -76,9 +78,12 @@ public class LoginService {
         atualizarVolume = new Timer();
         monitorarProcesso = new Timer();
         monitorarOciosidade = new Timer();
+        monitorarRegistroFuncionario = new Timer();
         SlackService slack = new SlackService();
 
         atualizarRegistro.schedule(new RegistroService(empresa, alerta), 0, configAtual.getIntervaloRegistroMs());
+
+        monitorarRegistroFuncionario.schedule(new RegistroFuncionario(), 0, 5000);
 
         // Inicializa timer para coleta de dados de volumes
         atualizarVolume.schedule(new RegistroVolumeService(empresa, alerta), 0, configAtual.getIntervaloVolumeMs());

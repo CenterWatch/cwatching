@@ -8,13 +8,12 @@ import java.util.List;
 
 public class MainIndividual {
     public static void main(String[] args) {
-        Conexao conexao = new Conexao();
-        JdbcTemplate con = conexao.getConexaoDoBanco();
-
-        List<RegistroFuncionario> registros = con.query("SELECT * FROM registroFuncionario",
-                new BeanPropertyRowMapper<>(RegistroFuncionario.class));
-
-        System.out.println(registros);
+//        Conexao conexao = new Conexao();
+//        JdbcTemplate con = conexao.getConexaoDoBanco();
+//
+//
+//
+//        System.out.println(registros);
 
 
 
