@@ -43,7 +43,7 @@ public class Conexao {
 
          BasicDataSource dataSource = new BasicDataSource();
          dataSource.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-         dataSource.setUrl("jdbc:sqlserver://54.198.160.133:1433;database=cwdb;trustServerCertificate=true");
+         dataSource.setUrl("jdbc:sqlserver://54.198.160.133:1433;database=cwdbProd;trustServerCertificate=true");
          dataSource.setUsername("sa");
          dataSource.setPassword("cwc@2024");
 
@@ -70,8 +70,7 @@ public class Conexao {
         insertFuture(sql, conNuvem, args);
     }
 
-    public void insertDiff(String sqlL, String sqlN, Object ... args) {
-        insertFuture(sqlL, conLocal, args);
+    public void insertDiff(String sqlN, Object ... args) {
         insertFuture(sqlN, conNuvem, args);
     }
 

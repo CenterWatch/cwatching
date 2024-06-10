@@ -2,14 +2,14 @@ package com.cw.services;
 
 import com.cw.dao.ProcessoDAO;
 import com.cw.dao.RegistroDAO;
-import com.cw.models.Empresa;
-import com.cw.models.Processo;
-import com.cw.models.Registro;
-import com.cw.models.Sessao;
+import com.cw.dao.RegistroJpaDAO;
+import com.cw.database.JPAUtil;
+import com.cw.models.*;
 import com.github.britooo.looca.api.core.Looca;
 import oshi.SystemInfo;
 import oshi.software.os.OSProcess;
 
+import javax.persistence.EntityManager;
 import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -43,6 +43,27 @@ public class RegistroService extends TimerTask {
             registroDAO.inserirRegistro(registro, empresa);
 
             Registro r = registroDAO.buscarUltimoRegistroPorSessao(empresa);
+
+
+
+            // INSERT COM JPA INDIVIDUAL
+
+            EntityManager em = JPAUtil.getEntityManager();
+
+            RegistroJpaDAO registroJpaDAO = new RegistroJpaDAO(em);
+
+            RegistroJPA registroJpa = new RegistroJPA(
+                    looca.getProcessador().getUso()*10 > 100 ? 100.0 : looca.getProcessador().getUso()*10,
+                    looca.getMemoria().getEmUso(),
+                    looca.getMemoria().getDisponivel(),
+                    looca.getSistema().getTempoDeAtividade());
+
+            em.getTransaction().begin();
+
+            registroJpaDAO.registrar(registroJpa);
+
+            em.getTransaction().commit();
+            em.close();
 
             if (alertaService.verificarAlerta(r)) registrarProcessos(r);
         } catch (Exception e) {

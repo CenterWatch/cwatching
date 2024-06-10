@@ -26,11 +26,10 @@ public class RegistroDAO extends Conexao {
     }
 
     public void inserirRegistro(Registro r, Empresa emp) {
-        String sql1 = "INSERT INTO registro (uso_cpu, uso_ram, disponivel_ram, uptime, fk_sessao) VALUES (?, ?, ?, ?, (SELECT id_sessao FROM sessao JOIN maquina ON id_maquina = fk_maquina WHERE hostname = ? AND fk_empresa = ? ORDER BY dt_hora_sessao DESC LIMIT 1))";
         String sql2 = "INSERT INTO registro (uso_cpu, uso_ram, disponivel_ram, uptime, fk_sessao) VALUES (?, ?, ?, ?, (SELECT TOP 1 id_sessao FROM sessao JOIN maquina ON id_maquina = fk_maquina WHERE hostname = ? AND fk_empresa = ? ORDER BY dt_hora_sessao DESC))";
 
         try {
-            insertDiff(sql1, sql2, r.getUsoCpu(), r.getUsoRam(), r.getDisponivelRam(), r.getUptime(), new Looca().getRede().getParametros().getHostName(), emp.getIdEmpresa());
+            insertDiff(sql2, r.getUsoCpu(), r.getUsoRam(), r.getDisponivelRam(), r.getUptime(), new Looca().getRede().getParametros().getHostName(), emp.getIdEmpresa());
         } catch (Exception e) {
             LogsService.gerarLog("Falha ao inserir registro: " + e.getMessage());
         }
