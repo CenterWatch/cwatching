@@ -13,6 +13,7 @@ public class MainCW {
 
     public static void main(String[] args) {
 
+
         if (!Conexao.testarConexoes()) return;
 
         Usuario jean = new Usuario("jean.santos", "jea123123");
