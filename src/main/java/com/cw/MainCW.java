@@ -2,16 +2,18 @@ package com.cw;
 
 import com.cw.conexao.Conexao;
 import com.cw.models.Ocorrencia;
+import com.cw.models.Relatorio;
 import com.cw.models.Usuario;
 import com.cw.services.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class MainCW {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         if (!Conexao.testarConexoes()) return;
 
@@ -25,7 +27,7 @@ public class MainCW {
 
         List<Usuario> usuarios = Arrays.asList(jean, lucas, maria, pedro, samuel, vinicius, benedito);
 
-        Usuario user = usuarios.get(0);
+        Usuario user = new Usuario();
 
 //        Boolean loginNode = Boolean.parseBoolean(args[0]); // Caso for construir o arquivo .jar
 ////        Boolean loginNode = true; // Caso estiver executando na IDE
@@ -48,7 +50,9 @@ public class MainCW {
                 """);
 
 
-        LoginService.logar(false, user, false);
+      //  LoginService.logar(false, user, false);
+
+       
 
     }
 

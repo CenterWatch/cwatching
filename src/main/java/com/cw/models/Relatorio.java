@@ -8,8 +8,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.TimerTask;
 
-public class Relatorio {
+public class Relatorio extends TimerTask {
 
     Looca looca = new Looca();
 
@@ -24,6 +25,11 @@ public class Relatorio {
 
     public Relatorio() {
 
+    }
+
+    @Override
+    public void run() {
+        verificarMemoria();
     }
 
     public String verificarMemoria() {
