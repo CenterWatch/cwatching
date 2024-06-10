@@ -7,9 +7,12 @@ import com.github.britooo.looca.api.core.Looca;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Arrays;
 
 import org.apache.commons.io.FileUtils;
 import oshi.util.FileUtil;
+
+import static com.cw.services.LogsService.gerarLog;
 
 public class LimparVolume {
     private Alerta alerta;
@@ -71,7 +74,7 @@ public class LimparVolume {
                     }
                 }
             } catch (Exception e) {
-                System.out.println("Não foi possivel executar a limpeza " + e.getMessage());
+                gerarLog("Não foi possivel executar a limpeza " + e.getMessage() + " " + Arrays.toString(e.getStackTrace()));
             }
 
         }
