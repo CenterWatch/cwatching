@@ -47,6 +47,7 @@ public class MaquinaService {
                 System.out.println("Falha ao obter IP Público: " + e.getMessage());
             }
 
+            maquinaDAO.inserirMaquina(maquinaAtual, empresa);
             registrarGrupoVolumePorMaquina(empresa);
         } else {
             System.out.println("\nMáquina encontrada.");
@@ -57,7 +58,6 @@ public class MaquinaService {
             maquinaDAO.atualizarMaquina(maquinaAtual, empresa);
         }
 
-        maquinaDAO.inserirMaquina(maquinaAtual, empresa);
         atualizarGrupoVolumeExistente(empresa);
     }
 
